@@ -1,2 +1,6 @@
 vendor
 vendor/*
+node_modules
+node_modules/*
+client/index_bundle.js
+client/index.html

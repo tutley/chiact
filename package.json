@@ -1,0 +1,30 @@
+{
+  "name": "chiact",
+  "version": "0.0.1",
+  "description": "full stack for web apps using go, react, chi, mongodb",
+  "main": "index.js",
+  "scripts": {
+    "production": "webpack -p && go build",
+    "start": "webpack-dev-server"
+  },
+  "author": "Tom Utley",
+  "repository" : "https://github.com/tutley/chiact",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-react": "^6.16.0",
+    "css-loader": "^0.26.1",
+    "html-webpack-plugin": "^2.24.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "react": "^15.4.1",
+    "react-addons-css-transition-group": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-router": "^3.0.0"
+  }
+}
