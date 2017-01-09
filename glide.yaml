@@ -1,0 +1,20 @@
+package: github.com/tutley/chiact
+import:
+- package: github.com/bradialabs/shortid
+- package: github.com/dgrijalva/jwt-go
+  version: ^3.0.0
+  subpackages:
+  - request
+- package: github.com/pressly/chi
+  version: ^2.0.0
+  subpackages:
+  - middleware
+- package: golang.org/x/crypto
+  subpackages:
+  - bcrypt
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson
