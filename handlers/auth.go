@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
@@ -17,6 +18,11 @@ type userdata struct {
 	LastName  string `json:"last"`
 	Email     string `json:"email"`
 	Password  string `json:"pass"`
+}
+
+// UserData temporarily holds the user data for use in various middleware
+type UserData struct {
+	Stuff string
 }
 
 // SignUpHandler is a Handler function for handling a user
@@ -80,4 +86,41 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "{\"token\": \"%s\"}", tokenString)
+}
+
+// GetMeHandler answers the /me path and sends the current user's profile
+func GetMeHandler(w http.ResponseWriter, r *http.Request) {
+	user := startup.GetUser(r.Context())
+	j, er := json.Marshal(&user)
+	if er != nil {
+		log.Fatal(er)
+	}
+	w.Write(j)
+}
+
+// UpdateMeHandler takes the context user info and saves it to the db
+func UpdateMeHandler(w http.ResponseWriter, r *http.Request) {
+	db := startup.GetDb(r.Context())
+	user := startup.GetUser(r.Context())
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	userData := UserData{}
+	err = json.Unmarshal(body, &userData)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+	user.Data = userData
+	user.Save(db)
+
+	j, er := json.Marshal(&user)
+	if er != nil {
+		log.Fatal(er)
+	}
+	w.Write(j)
 }

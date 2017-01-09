@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"context"
 	"encoding/base64"
@@ -22,23 +22,26 @@ import (
 	"github.com/tutley/chiact/helpers"
 )
 
-// UserData temporarily holds the user data for use in various middleware
-type UserData struct {
-	Stuff string
-}
-
 func main() {
-	startup.SetJwtSecret([]byte("secret"))
+	startup.SetJwtSecret([]byte("youshouldchangethissecret"))
 
 	r := chi.NewRouter()
 
+	// Use Chi built-in middlewares
 	r.Use(middleware.Logger)
 
+	// Serve the client
+	workDir, _ := os.Getwd()
+	filesDir := filepath.Join(workDir, "client")
+	r.FileServer("/", http.Dir(filesDir))
+
+	// Setup routes/routers for the API. The routers are defined last in this file
 	r.Post("/api/1/signup", auth.SignUpHandler)
 	r.Mount("/api/1", APIRouter())
 	r.Mount("/api/1/login", LoginRouter())
 
-	http.ListenAndServe(":3333", r)
+	// and.... go!
+	http.ListenAndServe(":3333", r) // TODO: Make this port a config var
 }
 
 // This section contains helper functions and local middlewares
@@ -185,40 +188,8 @@ func APIRouter() chi.Router {
 	r.Use(ChiMongoMiddleware)
 	r.Use(ChiJwtAuthMiddleware)
 
-	r.Get("/me", func(w http.ResponseWriter, r *http.Request) {
-		user := startup.GetUser(r.Context())
-		j, er := json.Marshal(&user)
-		if er != nil {
-			log.Fatal(er)
-		}
-		w.Write(j)
-	})
-
-	r.Put("/me", func(w http.ResponseWriter, r *http.Request) {
-		db := startup.GetDb(r.Context())
-		user := startup.GetUser(r.Context())
-
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-			return
-		}
-
-		userData := UserData{}
-		err = json.Unmarshal(body, &userData)
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-			return
-		}
-		user.Data = userData
-		user.Save(db)
-
-		j, er := json.Marshal(&user)
-		if er != nil {
-			log.Fatal(er)
-		}
-		w.Write(j)
-	})
+	r.Get("/me", auth.GetMeHandler)
+	r.Put("/me", auth.UpdateMeHandler)
 
 	return r
 }
