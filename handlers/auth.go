@@ -22,7 +22,7 @@ type userdata struct {
 // SignUpHandler is a Handler function for handling a user
 // user signup route
 func SignUpHandler(w http.ResponseWriter, r *http.Request) {
-	db := helpers.GetDb(r.Context())
+	db := startup.GetDb(r.Context())
 	if db == nil {
 		http.Error(w, "No database context", 500)
 		return
@@ -55,13 +55,13 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 // SignInHandler will return a JWT token for the user that signed in.
 // This route must use the BasicMiddleware for authentication
 func SignInHandler(w http.ResponseWriter, r *http.Request) {
-	db := helpers.GetDb(r.Context())
+	db := startup.GetDb(r.Context())
 	if db == nil {
 		http.Error(w, "No database context", 500)
 		return
 	}
 
-	user := helpers.GetUser(r.Context())
+	user := startup.GetUser(r.Context())
 	if user == nil {
 		http.Error(w, "No user context", 401)
 		return
@@ -73,7 +73,7 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 		"exp": time.Now().Add(time.Second * 3600 * 24).Unix(),
 	})
 
-	tokenString, err := token.SignedString(helpers.JwtSecret)
+	tokenString, err := token.SignedString(startup.JwtSecret)
 	if err != nil {
 		http.Error(w, "Failed to create token", 401)
 		return
