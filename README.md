@@ -24,8 +24,9 @@ There is a react app, but it does nothing yet
      1. (you will need to edit the name chiact in other places for display purposes)
 4. glide install
 5. npm install
-6. npm run production
-7. $GOHOME/bin/myprojectname
+6. npm start
+
+To build for production: npm run production
 
 ### Go Structure
 The server side, written with Go, uses glide for vendoring (dependency management) and can be run locally with "go run main.go". The glide.yaml file holds the dependencies, which can be installed with 'glide install'.
