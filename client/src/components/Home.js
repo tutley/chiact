@@ -9,7 +9,7 @@ var Home = React.createClass({
       <MainContainer>
         <h1>chiact</h1>
         <p className='lead'>Some fancy Motto</p>
-
+        <h6>test</h6>
       </MainContainer>
     )
   }

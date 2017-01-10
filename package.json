@@ -4,8 +4,8 @@
   "description": "full stack for web apps using go, react, chi, mongodb",
   "main": "index.js",
   "scripts": {
-    "production": "webpack -p && go build",
-    "start": "webpack-dev-server"
+    "production": "go build && webpack -p",
+    "start": "go run main.go & webpack --progress --colors --watch"
   },
   "author": "Tom Utley",
   "repository" : "https://github.com/tutley/chiact",
