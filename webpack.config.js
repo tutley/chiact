@@ -1,3 +1,4 @@
+const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + '/client/src/index.html',
@@ -6,18 +7,23 @@ var HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 })
 
 module.exports = {
-  entry: [
-    './client/src/index.js'
-  ],
+  entry: path.join(__dirname, '/client/src/index.jsx'),
   output: {
-    path: __dirname + '/client',
+    path: path.join(__dirname, '/client'),
     filename: 'index_bundle.js'
   },
   module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
-      { test: /\.css$/, loader: "style-loader!css-loader" }
-    ]
+    loaders: [{
+      test: /\.jsx?$/,
+      include: path.join(__dirname, '/client/src'),
+      loader: 'babel',
+      query: {
+        presets: ["react", "es2015"]
+      }
+    }, {
+      test: /\.css$/,
+      loader: "style-loader!css-loader"
+    }]
   },
   plugins: [HtmlWebpackPluginConfig]
 }

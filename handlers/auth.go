@@ -14,13 +14,12 @@ import (
 )
 
 type userdata struct {
-	FirstName string `json:"first"`
-	LastName  string `json:"last"`
-	Email     string `json:"email"`
-	Password  string `json:"pass"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-// UserData temporarily holds the user data for use in various middleware
+// UserData temporarily holds the user data
 type UserData struct {
 	Stuff string
 }
@@ -48,7 +47,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = users.NewUser(userInfo.Email, userInfo.Password,
-		userInfo.FirstName, userInfo.LastName, db)
+		userInfo.Name, db)
 	if err != nil {
 		http.Error(w, err.Error(), 409)
 		return

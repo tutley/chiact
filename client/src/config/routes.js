@@ -1,18 +1,48 @@
-var React = require('react');
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var IndexRoute = ReactRouter.IndexRoute;
-var hashHistory = ReactRouter.hashHistory;
-var Main = require('../components/Main');
-var Home = require('../components/Home');
+import Base from '../components/Base.jsx';
+import HomePage from '../components/HomePage.jsx';
+import DashboardPage from '../containers/DashboardPage.jsx';
+import LoginPage from '../containers/LoginPage.jsx';
+import SignUpPage from '../containers/SignUpPage.jsx';
+import Auth from '../modules/Auth';
 
-var routes = (
-  <Router history={hashHistory}>
-    <Route path='/' component={Main}>
-      <IndexRoute component={Home} />
-    </Route>
-  </Router>
-);
 
-module.exports = routes;
+const routes = {
+  // base component (wrapper for the whole application).
+  component: Base,
+  childRoutes: [
+
+    {
+      path: '/',
+      getComponent: (location, callback) => {
+        if (Auth.isUserAuthenticated()) {
+          callback(null, DashboardPage);
+        } else {
+          callback(null, HomePage);
+        }
+      }
+    },
+
+    {
+      path: '/login',
+      component: LoginPage
+    },
+
+    {
+      path: '/signup',
+      component: SignUpPage
+    },
+
+    {
+      path: '/logout',
+      onEnter: (nextState, replace) => {
+        Auth.deauthenticateUser();
+
+        // change the current URL to /
+        replace('/');
+      }
+    }
+
+  ]
+};
+
+export default routes;

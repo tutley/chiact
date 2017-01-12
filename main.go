@@ -30,6 +30,9 @@ func main() {
 	// Use Chi built-in middlewares
 	r.Use(middleware.Logger)
 
+	// Mount database
+	r.Use(ChiMongoMiddleware)
+
 	// Serve the client
 	workDir, _ := os.Getwd()
 	filesDir := filepath.Join(workDir, "client")
@@ -65,7 +68,7 @@ func ChiMongoMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// ChiBasicMiddleware lets us process logins and signups
+// ChiBasicMiddleware lets us process logins
 func ChiBasicMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		db := startup.GetDb(r.Context())
@@ -174,7 +177,7 @@ func ChiJwtAuthMiddleware(next http.Handler) http.Handler {
 func LoginRouter() chi.Router {
 	r := chi.NewRouter()
 
-	r.Use(ChiMongoMiddleware)
+	//r.Use(ChiMongoMiddleware)
 	r.Use(ChiBasicMiddleware)
 
 	r.Get("/", auth.SignInHandler)
@@ -185,7 +188,7 @@ func LoginRouter() chi.Router {
 func APIRouter() chi.Router {
 	r := chi.NewRouter()
 
-	r.Use(ChiMongoMiddleware)
+	//r.Use(ChiMongoMiddleware)
 	r.Use(ChiJwtAuthMiddleware)
 
 	r.Get("/me", auth.GetMeHandler)

@@ -13,18 +13,17 @@ import (
 
 // User structure for working with users
 type User struct {
-	ID        string      `json:"id" bson:"_id,omitempty"`
-	Email     string      `json:"email"`
-	Password  string      `json:"-"`
-	Created   time.Time   `json:"created"`
-	FirstName string      `json:"first"`
-	LastName  string      `json:"last"`
-	Data      interface{} `json:"data"`
+	ID       string      `json:"id" bson:"_id,omitempty"`
+	Email    string      `json:"email"`
+	Password string      `json:"-"`
+	Created  time.Time   `json:"created"`
+	Name     string      `json:"name"`
+	Data     interface{} `json:"data"`
 }
 
 // NewUser creates a new User and saves it in the database
 func NewUser(email string, pass string,
-	firstName string, lastName string, db *mgo.Database) (*User, error) {
+	name string, db *mgo.Database) (*User, error) {
 	//verify the email isn't already being used
 	user, _ := FindUserByEmail(email, db)
 	if user != nil {
@@ -40,13 +39,12 @@ func NewUser(email string, pass string,
 	sid.SetSeed(200)
 
 	newUser := User{
-		ID:        sid.Generate(),
-		Email:     email,
-		Password:  string(passHash),
-		Created:   time.Now(),
-		FirstName: firstName,
-		LastName:  lastName,
-		Data:      nil,
+		ID:       sid.Generate(),
+		Email:    email,
+		Password: string(passHash),
+		Created:  time.Now(),
+		Name:     name,
+		Data:     nil,
 	}
 
 	err = newUser.Save(db)
