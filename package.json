@@ -1,6 +1,6 @@
 {
   "name": "chiact",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "full stack for web apps using go, react, chi, mongodb",
   "main": "index.js",
   "scripts": {
