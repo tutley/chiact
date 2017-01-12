@@ -14,15 +14,15 @@ chiact includes:
 I am working on this in order to learn React and Go. I am not seasoned with either language and so I am sure there are many things I could be doing differently/better. I welcome any pull requests to improve or add to this code.
 
 ### Instructions
-0. Make sure you have Go, NPM, and Mongo installed 
-1. cd $GOHOME/src/github.com/your-github-username
-2. Clone Repo - git clone https://github.com/tutley/chiact myprojectname
-3. Search and replace in the directory for tutley/chiact, replace with your-github-username/myprojectname
-     1. (you will need to edit the name chiact in other places for display purposes)
-4. glide install
-5. npm install
-6. npm start
-7. http://localhost:3333/ - Create an account and login to test that it's working
+1. Make sure you have Go, NPM, and Mongo installed
+2. cd $GOHOME/src/github.com/your-github-username
+3. Clone Repo - git clone https://github.com/tutley/chiact myprojectname
+4. Search and replace in the directory for tutley/chiact, replace with your-github-username/myprojectname
+      1. (you will need to edit the name chiact in other places for display purposes)
+5. glide install
+6. npm install
+7. npm start
+8. http://localhost:3333/ - Create an account and login to test that it's working
 
 To build for production: npm run production
 
