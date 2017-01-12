@@ -4,7 +4,7 @@
   "description": "full stack for web apps using go, react, chi, mongodb",
   "main": "index.js",
   "scripts": {
-    "production": "go build && webpack -p",
+    "production": "go install && webpack -p",
     "start": "go run main.go & webpack --progress --colors --watch"
   },
   "author": "Tom Utley",
