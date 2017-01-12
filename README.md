@@ -14,6 +14,7 @@ chiact includes:
 I am working on this in order to learn React and Go. I am not seasoned with either language and so I am sure there are many things I could be doing differently/better. I welcome any pull requests to improve or add to this code.
 
 ### Instructions
+0. Make sure you have Go, NPM, and Mongo installed 
 1. cd $GOHOME/src/github.com/your-github-username
 2. Clone Repo - git clone https://github.com/tutley/chiact myprojectname
 3. Search and replace in the directory for tutley/chiact, replace with your-github-username/myprojectname
