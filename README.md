@@ -3,6 +3,7 @@
 ***WARNING: Much Refactoring Underway***
 
 Up Next: 
+
 1. add Redux to manage application state
 2. Add user account view page and edit functionality
 3. Add a meetings model and CRUD routes on the server to create a list of meetings (blogs are so overdone)
