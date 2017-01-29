@@ -1,4 +1,4 @@
-package auth
+package handlers
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ type UserData struct {
 // SignUpHandler is a Handler function for handling a user
 // user signup route
 func SignUpHandler(w http.ResponseWriter, r *http.Request) {
-	db := startup.GetDb(r.Context())
+	db := helpers.GetDb(r.Context())
 	if db == nil {
 		http.Error(w, "No database context", 500)
 		return
@@ -46,7 +46,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = users.NewUser(userInfo.Email, userInfo.Password,
+	_, err = models.NewUser(userInfo.Email, userInfo.Password,
 		userInfo.Name, db)
 	if err != nil {
 		http.Error(w, err.Error(), 409)
@@ -60,13 +60,13 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 // SignInHandler will return a JWT token for the user that signed in.
 // This route must use the BasicMiddleware for authentication
 func SignInHandler(w http.ResponseWriter, r *http.Request) {
-	db := startup.GetDb(r.Context())
+	db := helpers.GetDb(r.Context())
 	if db == nil {
 		http.Error(w, "No database context", 500)
 		return
 	}
 
-	user := startup.GetUser(r.Context())
+	user := helpers.GetUser(r.Context())
 	if user == nil {
 		http.Error(w, "No user context", 401)
 		return
@@ -78,7 +78,7 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 		"exp": time.Now().Add(time.Second * 3600 * 24).Unix(),
 	})
 
-	tokenString, err := token.SignedString(startup.JwtSecret)
+	tokenString, err := token.SignedString(helpers.JwtSecret)
 	if err != nil {
 		http.Error(w, "Failed to create token", 401)
 		return
@@ -89,7 +89,7 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 
 // GetMeHandler answers the /me path and sends the current user's profile
 func GetMeHandler(w http.ResponseWriter, r *http.Request) {
-	user := startup.GetUser(r.Context())
+	user := helpers.GetUser(r.Context())
 	j, er := json.Marshal(&user)
 	if er != nil {
 		log.Fatal(er)
@@ -99,8 +99,8 @@ func GetMeHandler(w http.ResponseWriter, r *http.Request) {
 
 // UpdateMeHandler takes the context user info and saves it to the db
 func UpdateMeHandler(w http.ResponseWriter, r *http.Request) {
-	db := startup.GetDb(r.Context())
-	user := startup.GetUser(r.Context())
+	db := helpers.GetDb(r.Context())
+	user := helpers.GetUser(r.Context())
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

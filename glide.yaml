@@ -9,12 +9,10 @@ import:
   version: ^2.0.0
   subpackages:
   - middleware
+- package: github.com/tutley/phantomgo
 - package: golang.org/x/crypto
   subpackages:
   - bcrypt
-- package: golang.org/x/net
-  subpackages:
-  - context
 - package: gopkg.in/mgo.v2
   subpackages:
   - bson

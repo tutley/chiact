@@ -10,7 +10,7 @@ module.exports = {
   entry: path.join(__dirname, '/client/src/index.jsx'),
   output: {
     path: path.join(__dirname, '/client'),
-    filename: 'index_bundle.js'
+    filename: '/client/index_bundle.js'
   },
   module: {
     loaders: [{
