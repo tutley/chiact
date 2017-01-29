@@ -2,6 +2,14 @@
 
 ***WARNING: Much Refactoring Underway***
 
+Up Next: 
+1. add Redux to manage application state
+2. Add user account view page and edit functionality
+3. Add a meetings model and CRUD routes on the server to create a list of meetings (blogs are so overdone)
+4. Incorporate the meetings into the client app
+
+## Overview 
+
 The goal of this project is to create a boilerplate for developing full-stack web applications using [Golang](https://golang.org) (Go) on the server side and [React](https://facebook.github.io/react/) on the client side.
 
 chiact includes:
@@ -40,7 +48,7 @@ The server side, written with Go, uses glide for vendoring (dependency managemen
 We have included mgo for storing data in MongoDB but if you prefer another database that could be changed by editing the models as well as the db init in main and helpers.
 
 #### Server-Side Rendering
-I created a middleware for this project (prerender) that uses PhantomJS and MongoDB to create and save a string representation of an entire rendered-page. Based on some logic in the middleware, the Go application will either serve the entire page from the string (stored in the database), or pass through and serve the react app and let react router figure out what to do. The static assets and the API routes are excluded from this. The prerender middleware checks the database to see if the page is already there, and if not it kicks off a goroutine to have PhantomJS create the string so the page can be stored. This also happens if the page is older than 1 hour. In any case where the server-side HTML isn't rendered, the middleware simply passes the HTTP Handler along to the next step without writing anything.
+I created a middleware for this project (prerender) that uses PhantomJS and MongoDB to create and save a string representation of an entire rendered-page. Based on some logic in the middleware, the Go application will either serve the entire page from the string (stored in the database), or pass through and serve the react app and let react router figure out what to do. The static assets and the API routes are excluded from this. The prerender middleware checks the database to see if the page is already there, and if not it kicks off a goroutine to have PhantomJS create the string so the page can be stored. This also happens if the page is older than 1 hour. 
 
 ### React Structure
 The client application is written in React, which requires a few files in the main directory for development purposes. The files that will be served for the client are in the client directory. The development is done on the files in the client/src directory, then webpack builds the final version.
