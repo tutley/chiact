@@ -1,6 +1,6 @@
 # chiact
 
-***Much Refactoring Underway***
+***WARNING: Much Refactoring Underway***
 
 The goal of this project is to create a boilerplate for developing full-stack web applications using [Golang](https://golang.org) (Go) on the server side and [React](https://facebook.github.io/react/) on the client side.
 
