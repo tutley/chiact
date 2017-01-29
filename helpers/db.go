@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"gopkg.in/mgo.v2"
 	"context"
+	"log"
 )
 
 // MongoMiddleware gives us our connection to the database
@@ -13,7 +14,8 @@ func MongoMiddleware(next http.Handler) http.Handler {
 		session, err := mgo.Dial("mongodb://localhost/") // TODO: make this a config var
 
 		if err != nil {
-			panic(err)
+			log.Println("DB Connect error: ",err)
+			http.Error(w, "Unable to connect to database", 500)
 		}
 
 		reqSession := session.Clone()

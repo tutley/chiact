@@ -53,12 +53,9 @@ func renderAndSave(path string, sess *mgo.Session, dbName string) {
 func PrerenderMiddleware (next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := r.RequestURI
-		host := r.Host
-		log.Println("host requested: ", host)
 		re := regexp.MustCompile(".(gif|jpg|jpeg|tiff|png|js|ico)|(css/)|(js/)")
 		found := re.FindString(path)
 		if len(found) < 1 {
-			log.Println("Entered prerender middleware with url: ", path)
 			db := GetDb(r.Context())
 			if db == nil {
 				log.Print("No database context")
@@ -73,22 +70,23 @@ func PrerenderMiddleware (next http.Handler) http.Handler {
 			} else {
 				pageIsGood = true
 				if page == nil {
-					pageIsGood = false
+					pageExists = false
 				}
 				if len(page.Content) < 1 {
-					pageIsGood = false
+					pageExists = false
 				}
 				// if the page is more than a certain time period old, redo it
 				tStart := time.Now().Add(-(time.Minute*60))
-				// TODO: Add some way to check if this is a robot (google, facebook, whatever) and maybe serve them the old string anyway
+
 				if page.Modified.Before(tStart) {
 					log.Println("The page was prerendered more than 60 minutes ago")
 					pageIsGood = false
 				}
-				if pageExists && pageIsGood {
-					log.Println("*******************************************************")
-					log.Println("**********     HOLYCRAPITWORKED     *******************")
-					log.Println("*******************************************************")
+				if pageExists {
+					//log.Println("*******************************************************")
+					//log.Println("**********     HOLYCRAPITWORKED     *******************")
+					//log.Println("*******************************************************")
+					log.Println("**** Serving Stored Version from Database ****")
 					w.WriteHeader(http.StatusOK)
 					w.Write([]byte(page.Content))
 				}
@@ -97,9 +95,7 @@ func PrerenderMiddleware (next http.Handler) http.Handler {
 			// So here we launch the goroutine to rerender the page
 			if r.Host != "127.0.0.1:3333" {
 				if !pageExists || !pageIsGood {
-					log.Println("@#@#@#@#@#@#@#@#@#@#@#@#")
-					log.Println("@#@ starting phantom #@#")
-					log.Println("@#@#@#@#@#@#@#@#@#@#@#@#")
+					log.Println("@#@ starting phantom prerendering process #@#")
 					// we're kicking off a goroutine and moving on, so we have to send
 					// along a copy of the database session or it will close prematurely
 					go renderAndSave(path, db.Session.Copy(), db.Name)
