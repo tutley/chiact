@@ -80,8 +80,9 @@ func PrerenderMiddleware (next http.Handler) http.Handler {
 				}
 				// if the page is more than a certain time period old, redo it
 				tStart := time.Now().Add(-(time.Minute*60))
+				// TODO: Add some way to check if this is a robot (google, facebook, whatever) and maybe serve them the old string anyway
 				if page.Modified.Before(tStart) {
-					log.Println("The page was prerendered more than 15 minutes ago")
+					log.Println("The page was prerendered more than 60 minutes ago")
 					pageIsGood = false
 				}
 				if pageExists && pageIsGood {
